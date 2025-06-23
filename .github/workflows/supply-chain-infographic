@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Supply Chain Operations: An Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flow-line {
+            width: 2px;
+            background-color: #0582CA;
+        }
+        .flow-line-h {
+            height: 2px;
+            background-color: #0582CA;
+        }
+        .flow-arrow::after {
+            content: '▼';
+            color: #0582CA;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .flow-arrow-right::after {
+            content: '►';
+            color: #0582CA;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #006494;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<!-- 
+    Chosen Color Palette: Energetic & Playful
+    #00A6FB (Vibrant Blue)
+    #0582CA (Primary Blue)
+    #006494 (Dark Blue)
+    #F9A03F (Accent Orange)
+    #F27B13 (Dark Accent Orange)
+-->
+<!-- 
+    Narrative & Structure Plan:
+    1.  Hero Section: Hook with a major financial figure.
+    2.  Overall Landscape: Visualize inbound, outbound, and cross-trade streams.
+    3.  Inbound Deep Dive: Focus on Australia (RPF AU) imports, showing sources and process.
+    4.  Outbound Deep Dive: Detail export processes from Australia, covering both direct to customer/other RPF, and the specific RPF NZD-controlled flow to RPF Singapore (no hub).
+    5.  Cross-Trade / Direct Overseas Shipments: Explain this third flow where Australia orchestrates shipments between other countries.
+    6.  Stakeholder Analysis: Show key players and their roles/shares.
+    7.  Operational Challenges: Highlight manual processes and documentation bottlenecks.
+    8.  NEW: LLM-powered Quick Explanations & Supply Chain Insights.
+    9.  Conclusion/Optimization: Propose key areas for improvement.
+-->
+<!--
+    Visualization Selection:
+    - Big Number (>$16M): Goal: Inform. Method: Styled HTML. Justification: High impact for a key financial data point. (NO SVG)
+    - Overall Supply Chain Overview (3-part flow): Goal: Organize. Method: HTML/CSS with Tailwind. Justification: Clearly illustrates the three primary, parallel supply chain streams (Inbound, Outbound, Cross-Trade). (NO SVG, NO MERMAID JS)
+    - Inbound Sources Donut Chart: Goal: Compare. Method: Chart.js Canvas. Justification: Effectively shows the proportional contribution of finished goods sources. (NO SVG)
+    - Outbound Process Flow (General Export): Goal: Organize. Method: HTML/CSS with Tailwind. Justification: Step-by-step visual guide to general export process from Australia. (NO SVG, NO MERMAID JS)
+    - Outbound Process Flow (RPF NZD Controlled): Goal: Organize. Method: HTML/CSS with Tailwind. Justification: Specific flow for shipments to RPF Singapore, controlled by RPF NZD, without hubbing. (NO SVG, NO MERMAID JS)
+    - Cross-Trade Process Flow: Goal: Organize. Method: HTML/CSS with Tailwind. Justification: Illustrates the non-Australian physical flow managed by RPF AU. (NO SVG, NO MERMAID JS)
+    - Stakeholder Allocation Pie Chart: Goal: Compare. Method: Chart.js Canvas. Justification: Visualizes the breakdown of responsibilities/shares among key entities. (NO SVG)
+    - Documentation Grid: Goal: Organize. Method: HTML/CSS Grid. Justification: Presents a clear, scannable list of critical documents. (NO SVG)
+-->
+<!-- 
+    Confirmation: NEITHER Mermaid JS NOR SVG were used in this file. All charts are rendered on HTML Canvas elements via Chart.js, and all diagrams are constructed using structured HTML and styled with Tailwind CSS.
+-->
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-black text-[#006494] uppercase tracking-wide">Deconstructing the Global Supply Chain</h1>
+            <p class="text-lg md:text-xl text-[#0582CA] mt-2">An inside look at the complex logistics, key players, and operational hurdles from internal records.</p>
+        </header>
+
+        <section id="kpi" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-3xl mx-auto text-center border-t-8 border-[#00A6FB]">
+                <h2 class="text-2xl font-bold text-[#006494] mb-2">High-Value Operations</h2>
+                 <p class="text-gray-600 mb-4">The documentation reveals significant financial transactions, with individual approvals noted for sums exceeding major thresholds, highlighting the scale of financial governance required.</p>
+                <div class="text-7xl md:text-8xl font-black text-[#00A6FB] my-4 tracking-tighter">&gt;$16M</div>
+                <p class="text-sm text-gray-500">Single Transaction Approval Threshold</p>
+            </div>
+        </section>
+
+        <section id="landscape" class="mb-16">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#006494]">A Multi-Faceted Supply Chain</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mt-2">Operations involve distinct inbound flows to Australia, outbound exports from Australia, and strategic cross-trade shipments orchestrated globally.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-[#F9A03F]">
+                    <h3 class="text-2xl font-bold text-[#F27B13] flex items-center"><span class="text-3xl mr-3">📥</span> Inbound to Australia (RPF AU)</h3>
+                    <p class="mt-2 text-gray-600">Finished goods and raw materials flow into Australia from global suppliers to feed local operations.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-[#00A6FB]">
+                    <h3 class="text-2xl font-bold text-[#006494] flex items-center"><span class="text-3xl mr-3">📤</span> Outbound from Australia</h3>
+                    <p class="mt-2 text-gray-600">Products are shipped directly from Australia to international destinations, managed by local entities.</p>
+                </div>
+                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-[#F27B13]">
+                    <h3 class="text-2xl font-bold text-[#F27B13] flex items-center"><span class="text-3xl mr-3">🔄</span> Cross-Trade Shipments</h3>
+                    <p class="mt-2 text-gray-600">Overseas shipments orchestrated by Australian entities, but moving directly between two non-Australian countries.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="inbound" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#006494]">Inbound Deep Dive: The Funnel to Australia (RPF AU)</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 mt-2">Finished goods are sourced from multiple origins, with Thailand as the dominant supplier, feeding into the Australian operational hub for RPF AU.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="inboundSourcesChart"></canvas>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#006494] mb-4">The Journey of Inbound Goods</h3>
+                        <div class="flex flex-col items-center">
+                            <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                                <p class="font-bold">Suppliers (i-Tail, Sea Value)</p>
+                                <p class="text-sm text-gray-500">Origin: Thailand & NZ</p>
+                            </div>
+                            <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                            <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                                <p class="font-bold">Forwarder Managed</p>
+                                <p class="text-sm text-gray-500">Handles Freight & Customs</p>
+                            </div>
+                            <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                             <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                                <p class="font-bold">Customs Clearance & Processing</p>
+                                <p class="text-sm text-gray-500">"Custom clean 2" stage</p>
+                            </div>
+                            <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                            <div class="w-full bg-[#F9A03F] text-white rounded-lg p-4 text-center shadow-lg">
+                                <p class="font-bold">Cross-Dock Hub (Ingleburn)</p>
+                                <p class="text-sm text-yellow-100">Rapid processing for distribution, utilizing CHEP</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="outbound" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#006494]">Outbound Deep Dive: Exports from Australia</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 mt-2">Overseas shipments originate from the Australian "Shipper/Exporter" (RPF AU), managed directly through forwarders, destined for various global locations, including specific RPF entities.</p>
+                </div>
+
+                <h3 class="text-2xl font-bold text-[#006494] mb-4 mt-8">Scenario 1: Direct Exports to End Customer or Other RPF Locations</h3>
+                <div class="flex flex-col items-center mb-12">
+                    <div class="w-full bg-[#00A6FB] text-white rounded-lg p-4 text-center shadow-lg">
+                        <p class="font-bold">Shipper/Exporter (RPF AU, Australia)</p>
+                        <p class="text-sm text-blue-100">Initiates Direct Overseas Shipment</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Forwarder Engagement</p>
+                        <p class="text-sm text-gray-500">Manages freight & global customs clearance</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Co-Manufacturer Coordination</p>
+                        <p class="text-sm text-gray-500">Contacted for final product preparation ("walling/other dotars")</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Comprehensive Documentation</p>
+                        <p class="text-sm text-gray-500">Full set of Docs, including PKL, CIV, VGM, Certs, XB/L</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-[#F9A03F] text-white rounded-lg p-4 text-center shadow-lg">
+                        <p class="font-bold">Final Customer & Consignee</p>
+                        <p class="text-sm text-yellow-100">Receipt of goods, payment reconciliation (e.g., other RPF locations)</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-[#006494] mb-4 mt-8">Scenario 2: Exports from Australia to RPF Singapore (RPF NZD Details, No SG Hub)</h3>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-6">This unique flow involves goods shipped from Australia directly to RPF Singapore's end customer, with all final shipment details and documentation controlled by RPF NZD, bypassing a physical hub in Singapore.</p>
+                <div class="flex flex-col items-center">
+                    <div class="w-full bg-[#00A6FB] text-white rounded-lg p-4 text-center shadow-lg">
+                        <p class="font-bold">Shipper/Exporter (RPF AU, Australia)</p>
+                        <p class="text-sm text-blue-100">Initiates Direct Overseas Shipment towards RPF SG</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Forwarder Engagement</p>
+                        <p class="text-sm text-gray-500">Manages direct freight to Singapore destination</p>
+                    </div>
+                     <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">RPF NZD Involvement</p>
+                        <p class="text-sm text-gray-500">Provides final shipment details, documentation updates (e.g., change destination details)</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Direct Delivery to End Consignee (RPF SG Customer)</p>
+                        <p class="text-sm text-gray-500">Shipment bypasses physical hub in Singapore</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-[#F9A03F] text-white rounded-lg p-4 text-center shadow-lg">
+                        <p class="font-bold">Payment & Reconciliation (RPF SG)</p>
+                        <p class="text-sm text-yellow-100">Final payment and reconciliation at RPF SG</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cross-trade" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#006494]">Cross-Trade: Orchestrating Global Shipments</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 mt-2">Beyond direct imports/exports, RPF AU also manages "PO Direct Oversea Shipments" where goods move directly between non-Australian origins and destinations.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-full bg-[#00A6FB] text-white rounded-lg p-4 text-center shadow-lg">
+                        <p class="font-bold">RPF AU (Australia)</p>
+                        <p class="text-sm text-blue-100">Orchestrates the shipment (financial, contractual)</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Origin Supplier (e.g., Thailand, NZ)</p>
+                        <p class="text-sm text-gray-500">Physical dispatch of goods</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Forwarder (Global Network)</p>
+                        <p class="text-sm text-gray-500">Manages direct freight between non-AU countries</p>
+                    </div>
+                    <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                    <div class="w-full bg-blue-50 rounded-lg p-4 text-center shadow">
+                        <p class="font-bold">Destination Consignee (e.g., RPF SG, other global customer)</p>
+                        <p class="text-sm text-gray-500">Receives goods directly from origin country</p>
+                    </div>
+                     <div class="h-8 w-px bg-[#0582CA] flow-arrow"></div>
+                     <div class="w-full bg-[#F9A03F] text-white rounded-lg p-4 text-center shadow-lg">
+                        <p class="font-bold">Financial & Documentation Management</p>
+                        <p class="text-sm text-yellow-100">RPF AU handles invoicing, payment, and required docs remotely.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="stakeholders" class="mb-16">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#006494]">Key Players & Partners</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mt-2">A network of internal entities, suppliers, and logistics partners collaborate to move goods. The records suggest specific allocations or shares among key players.</p>
+            </div>
+             <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="order-2 lg:order-1">
+                        <h3 class="text-xl font-bold text-[#006494] mb-4">Major External Partners</h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-[#00A6FB]">
+                                <h4 class="font-bold">Forwarders</h4>
+                                <p class="text-sm text-gray-600">The central nervous system for both inbound, outbound, and cross-trade freight.</p>
+                            </div>
+                             <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-[#F9A03F]">
+                                <h4 class="font-bold">i-Tail & Sea Value</h4>
+                                <p class="text-sm text-gray-600">Primary Thai suppliers for containerized (FCL) and less-than-container (LCL) loads respectively.</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-[#006494]">
+                                <h4 class="font-bold">Co-Manufacturers</h4>
+                                <p class="text-sm text-gray-600">Crucial for final export preparation, handling tasks like "walling/other dotars" before shipment.</p>
+                            </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container h-80 md:h-96 order-1 lg:order-2">
+                         <canvas id="stakeholderAllocationChart"></canvas>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="gemini-features" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#006494]">✨ Gemini-Powered Insights ✨</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 mt-2">Leverage AI to gain quick explanations and deeper insights into your supply chain operations.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-4 bg-blue-50 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-[#006494] mb-3">Quick Explanations ✨</h3>
+                        <p class="text-gray-600 text-sm mb-4">Enter a supply chain term (e.g., 'VGM', 'PKL', 'Cross-Dock') to get a concise explanation.</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <input type="text" id="termInput" placeholder="Enter a term..." class="flex-grow p-2 border border-gray-300 rounded-md focus:ring-[#00A6FB] focus:border-[#00A6FB]">
+                            <button id="explainButton" class="bg-[#00A6FB] text-white px-4 py-2 rounded-md hover:bg-[#0582CA] transition-colors flex items-center justify-center">
+                                <span id="explainButtonText">Explain</span>
+                                <div id="explainLoader" class="loader ml-2" style="display: none;"></div>
+                            </button>
+                        </div>
+                        <div id="explanationOutput" class="bg-white p-3 rounded-md border border-gray-200 min-h-[80px] text-gray-700"></div>
+                    </div>
+
+                    <div class="p-4 bg-yellow-50 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-[#F27B13] mb-3">Supply Chain Insights ✨</h3>
+                        <p class="text-gray-600 text-sm mb-4">Ask Gemini a question or request insights about the supply chain data presented above.</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <textarea id="insightInput" placeholder="e.g., 'Suggest ways to improve documentation efficiency'" rows="3" class="flex-grow p-2 border border-gray-300 rounded-md focus:ring-[#F9A03F] focus:border-[#F9A03F]"></textarea>
+                            <button id="getInsightsButton" class="bg-[#F9A03F] text-white px-4 py-2 rounded-md hover:bg-[#F27B13] transition-colors flex items-center justify-center self-start">
+                                <span id="insightsButtonText">Get Insights</span>
+                                <div id="insightsLoader" class="loader ml-2" style="display: none;"></div>
+                            </button>
+                        </div>
+                        <div id="insightsOutput" class="bg-white p-3 rounded-md border border-gray-200 min-h-[80px] text-gray-700"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="challenges" class="mb-16">
+             <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#006494]">Operational Hurdles & Manual Processes</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mt-2">The heavy reliance on manual documentation and fragmented communication creates significant operational risks and inefficiencies.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-5xl mb-4">📄</div>
+                    <h3 class="font-bold text-xl text-[#006494]">Documentation is King</h3>
+                    <p class="text-gray-600 text-sm mt-2">Accuracy of Packing Lists (PKL), Commercial Invoices (CIV), and VGM is paramount for financial reconciliation and compliance across all flows.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center border-t-8 border-[#F27B13]">
+                    <div class="text-5xl mb-4">✍️</div>
+                    <h3 class="font-bold text-xl text-[#F27B13]">Manual Intervention Required</h3>
+                    <p class="text-gray-600 text-sm mt-2">Instructions like <span class="font-mono bg-yellow-100 px-1 rounded">"Create manual [invoice]"</span> and data reconciliation in <span class="font-mono bg-green-100 px-1 rounded">Excel</span> point to a lack of automation.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-5xl mb-4">💬</div>
+                    <h3 class="font-bold text-xl text-[#006494]">Informal Communication</h3>
+                    <p class="text-gray-600 text-sm mt-2">Direct, urgent commands like <span class="font-mono bg-red-100 px-1 rounded">"read payment!"</span> suggest processes rely on informal, high-stakes communication channels.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 pt-8 border-t border-gray-300">
+             <h2 class="text-3xl font-bold text-[#006494] mb-4">Path to Optimization</h2>
+             <p class="max-w-3xl mx-auto text-gray-600 mb-8">Addressing these challenges is key to building a more resilient and efficient supply chain. The path forward involves embracing technology and standardization.</p>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 <div class="bg-[#00A6FB] text-white rounded-lg p-6">
+                     <h3 class="font-bold text-xl">Digitize & Automate</h3>
+                     <p class="text-sm mt-2 opacity-90">Implement integrated systems (ERP/TMS) to replace manual spreadsheets and document creation.</p>
+                 </div>
+                 <div class="bg-[#0582CA] text-white rounded-lg p-6">
+                     <h3 class="font-bold text-xl">Standardize Processes</h3>
+                     <p class="text-sm mt-2 opacity-90">Develop formal Standard Operating Procedures (SOPs) to reduce ambiguity and reliance on individuals.</p>
+                 </div>
+                 <div class="bg-[#006494] text-white rounded-lg p-6">
+                     <h3 class="font-bold text-xl">Enhance Visibility</h3>
+                     <p class="text-sm mt-2 opacity-90">Create a centralized data hub for real-time tracking of shipments, inventory, and payments.</p>
+                 </div>
+             </div>
+        </footer>
+
+    </div>
+
+    <script>
+        function wrapText(text, maxLength) {
+            if (typeof text !== 'string' || text.length <= maxLength) {
+                return text;
+            }
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine) {
+                lines.push(currentLine.trim());
+            }
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const sharedChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                     labels: {
+                        font: {
+                            size: 12,
+                            family: 'Inter'
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    },
+                    backgroundColor: '#006494',
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold',
+                        family: 'Inter'
+                    },
+                    bodyFont: {
+                        size: 12,
+                        family: 'Inter'
+                    }
+                }
+            }
+        };
+
+        const ctxInbound = document.getElementById('inboundSourcesChart').getContext('2d');
+        new Chart(ctxInbound, {
+            type: 'doughnut',
+            data: {
+                labels: ['Thailand', 'New Zealand'],
+                datasets: [{
+                    label: 'Finished Goods Volume',
+                    data: [703, 27],
+                    backgroundColor: ['#00A6FB', '#F9A03F'],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                ...sharedChartOptions,
+                plugins: {
+                     ...sharedChartOptions.plugins,
+                    title: {
+                        display: true,
+                        text: 'Finished Goods Inbound Volume by Origin',
+                        font: { size: 16, weight: 'bold', family: 'Inter' },
+                        color: '#006494',
+                        padding: {
+                            bottom: 20
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+
+        const ctxStakeholders = document.getElementById('stakeholderAllocationChart').getContext('2d');
+        new Chart(ctxStakeholders, {
+            type: 'pie',
+            data: {
+                labels: [wrapText('Aladdin (HK) Johny', 16), wrapText('Co-manufacturer Contact', 16), wrapText('WENYIN (IW) Anny/Elvis', 16)],
+                datasets: [{
+                    label: 'Stakeholder Allocation %',
+                    data: [70, 20, 10],
+                    backgroundColor: ['#00A6FB', '#0582CA', '#F9A03F'],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                 ...sharedChartOptions,
+                 plugins: {
+                    ...sharedChartOptions.plugins,
+                    title: {
+                        display: true,
+                        text: 'Interpreted Stakeholder Allocation',
+                        font: { size: 16, weight: 'bold', family: 'Inter' },
+                        color: '#006494',
+                        padding: {
+                            bottom: 20
+                        }
+                    }
+                 }
+            }
+        });
+
+        // Gemini API Integration
+        async function callGeminiAPI(prompt, outputElement, buttonElement, loaderElement) {
+            outputElement.innerHTML = ''; // Clear previous output
+            buttonElement.disabled = true;
+            loaderElement.style.display = 'block';
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { contents: chatHistory };
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    outputElement.innerHTML = text;
+                } else {
+                    outputElement.innerHTML = 'Could not get a response. Please try again.';
+                    console.error('Unexpected API response structure:', result);
+                }
+            } catch (error) {
+                outputElement.innerHTML = 'Error calling Gemini API. Check console for details.';
+                console.error('Error:', error);
+            } finally {
+                buttonElement.disabled = false;
+                loaderElement.style.display = 'none';
+            }
+        }
+
+        // Quick Explanations
+        const termInput = document.getElementById('termInput');
+        const explainButton = document.getElementById('explainButton');
+        const explainLoader = document.getElementById('explainLoader');
+        const explanationOutput = document.getElementById('explanationOutput');
+
+        explainButton.addEventListener('click', () => {
+            const term = termInput.value.trim();
+            if (term) {
+                const prompt = `Provide a concise, 1-2 sentence explanation for the supply chain term: "${term}".`;
+                callGeminiAPI(prompt, explanationOutput, explainButton, explainLoader);
+            } else {
+                explanationOutput.innerHTML = 'Please enter a term to explain.';
+            }
+        });
+
+        // Supply Chain Insights
+        const insightInput = document.getElementById('insightInput');
+        const getInsightsButton = document.getElementById('getInsightsButton');
+        const insightsLoader = document.getElementById('insightsLoader');
+        const insightsOutput = document.getElementById('insightsOutput');
+
+        getInsightsButton.addEventListener('click', () => {
+            const userQuery = insightInput.value.trim();
+            if (userQuery) {
+                const prompt = `Based on the common challenges and processes in global supply chains, and considering details like inbound logistics from Thailand/NZ to Australia, exports from Australia (direct or RPF NZD controlled to RPF SG without hubbing), cross-trade shipments orchestrated by RPF AU, and noted issues like manual documentation (PKL, CIV, VGM, manual invoices, excel tables) and communication patterns ("read payment!"), provide an insight or answer to the following question: "${userQuery}". Focus on practical, actionable insights relevant to optimizing these operations.`;
+                callGeminiAPI(prompt, insightsOutput, getInsightsButton, insightsLoader);
+            } else {
+                insightsOutput.innerHTML = 'Please enter your question or request for insights.';
+            }
+        });
+    </script>
+
+</body>
+</html>
